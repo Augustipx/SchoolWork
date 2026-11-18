@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-import banner from '@/静态代码素材/img/fruit.jpg'
-import cherry from '@/静态代码素材/img/cherry.png'
-import durian from '@/静态代码素材/img/durian.png'
-import litchi from '@/静态代码素材/img/litchi.png'
-import pear from '@/静态代码素材/img/pear.png'
-import pitaya from '@/静态代码素材/img/pitaya.png'
+import huawei from '@/assets/phones/huawei.svg'
+import iphone from '@/assets/phones/iphone.svg'
+import oppo from '@/assets/phones/oppo.svg'
+import vivo from '@/assets/phones/vivo.svg'
+import xiaomi from '@/assets/phones/xiaomi.svg'
 
-interface Fruit {
+interface Phone {
   id: number
   name: string
   icon: string
@@ -16,37 +15,40 @@ interface Fruit {
   num: number
 }
 
-const fruitList = ref<Fruit[]>([
-  { id: 1, name: '火龙果', icon: pitaya, price: 6, num: 2 },
-  { id: 2, name: '荔枝', icon: litchi, price: 20, num: 7 },
-  { id: 3, name: '榴莲', icon: durian, price: 40, num: 3 },
-  { id: 4, name: '鸭梨', icon: pear, price: 3, num: 10 },
-  { id: 5, name: '樱桃', icon: cherry, price: 34, num: 20 },
+const phoneList = ref<Phone[]>([
+  { id: 1, name: 'iPhone 15 Pro', icon: iphone, price: 7999, num: 1 },
+  { id: 2, name: '华为 Mate 60 Pro', icon: huawei, price: 6499, num: 1 },
+  { id: 3, name: '小米 14', icon: xiaomi, price: 3999, num: 2 },
+  { id: 4, name: 'OPPO Find X7', icon: oppo, price: 3999, num: 1 },
+  { id: 5, name: 'vivo X100', icon: vivo, price: 3999, num: 1 },
 ])
 
 const totalPrice = computed(() =>
-  fruitList.value.reduce((sum, item) => sum + item.price * item.num, 0),
+  phoneList.value.reduce((sum, item) => sum + item.price * item.num, 0),
 )
 
-function decrease(item: Fruit) {
+function decrease(item: Phone) {
   if (item.num > 1) {
     item.num--
   }
 }
 
-function increase(item: Fruit) {
+function increase(item: Phone) {
   item.num++
 }
 
 function removeItem(index: number) {
-  fruitList.value.splice(index, 1)
+  phoneList.value.splice(index, 1)
 }
 </script>
 
 <template>
   <div class="app-container">
     <div class="banner-box">
-      <img :src="banner" alt="水果" />
+      <div>
+        <p class="banner-title">📱 手机商城</p>
+        <p class="banner-sub">精选旗舰手机 · 简易购物车</p>
+      </div>
     </div>
 
     <div class="breadcrumb">
@@ -55,12 +57,12 @@ function removeItem(index: number) {
       <span>购物车</span>
     </div>
 
-    <div v-if="fruitList.length" class="main">
+    <div v-if="phoneList.length" class="main">
       <div class="table">
         <div class="thead">
           <div class="tr">
             <div class="th th-pic">图片</div>
-            <div class="th">名称</div>
+            <div class="th name-th">名称</div>
             <div class="th">单价</div>
             <div class="th num-th">数量</div>
             <div class="th">小计</div>
@@ -69,11 +71,11 @@ function removeItem(index: number) {
         </div>
 
         <div class="tbody">
-          <div v-for="(item, index) in fruitList" :key="item.id" class="tr">
+          <div v-for="(item, index) in phoneList" :key="item.id" class="tr">
             <div class="td th-pic">
               <img :src="item.icon" :alt="item.name" />
             </div>
-            <div class="td">{{ item.name }}</div>
+            <div class="td name-th">{{ item.name }}</div>
             <div class="td">¥ {{ item.price }}</div>
             <div class="td">
               <div class="my-input-number">
@@ -98,7 +100,7 @@ function removeItem(index: number) {
       </div>
 
       <div class="bottom">
-        <span class="count">共 {{ fruitList.length }} 种水果</span>
+        <span class="count">共 {{ phoneList.length }} 种手机</span>
         <div class="right-box">
           <span class="price-box">
             总价&nbsp;:&nbsp;¥&nbsp;<span class="price">{{ totalPrice.toFixed(2) }}</span>
@@ -135,16 +137,26 @@ button {
 }
 
 .banner-box {
+  display: flex;
+  align-items: center;
   margin-bottom: 10px;
+  padding: 32px 36px;
   overflow: hidden;
   border-radius: 20px;
+  background: linear-gradient(120deg, #111827 0%, #374151 55%, #6b7280 100%);
+  color: #fff;
 }
 
-.banner-box img {
-  display: block;
-  width: 100%;
-  max-height: 260px;
-  object-fit: cover;
+.banner-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.banner-sub {
+  margin: 4px 0 0;
+  color: #d1d5db;
+  font-size: 15px;
 }
 
 .breadcrumb {
@@ -189,8 +201,12 @@ button {
   flex: 1.2;
 }
 
+.name-th {
+  flex: 1.4;
+}
+
 .num-th {
-  flex: 1.5;
+  flex: 1.4;
 }
 
 .table img {
@@ -205,7 +221,7 @@ button {
   height: 32px;
   padding: 4px 15px;
   color: #fff;
-  background: #d9363e;
+  background: #4b5563;
   border: 1px solid transparent;
   border-radius: 2px;
   cursor: pointer;
@@ -271,7 +287,7 @@ button {
 }
 
 .price {
-  color: hotpink;
+  color: #111827;
   font-size: 30px;
   font-weight: 700;
 }
@@ -287,6 +303,14 @@ button {
   .app-container {
     width: 100%;
     padding: 12px 12px 80px;
+  }
+
+  .banner-box {
+    padding: 24px;
+  }
+
+  .banner-title {
+    font-size: 24px;
   }
 
   .th,
